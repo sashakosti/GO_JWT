@@ -1,7 +1,10 @@
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username TEXT UNIQUE NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT now()
-);
+  
+  CREATE TABLE refresh_tokens (
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL,
+    token_hash TEXT NOT NULL,
+    user_agent TEXT,
+    ip_address TEXT,
+    expires_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT now()
+  );
