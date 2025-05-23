@@ -56,7 +56,7 @@ func main() {
 	cfg := &Config{
 		Port:            getEnv("PORT", "8080"),
 		DatabaseURL:     getEnv("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/auth?sslmode=disable"),
-		JWTSecret:       getEnv("JWT_SECRET", "default-secret-key-must-be-at-least-32-characters-long"),
+		JWTSecret:       mustGetEnv("JWT_SECRET"),
 		AccessTokenExp:  15 * time.Minute,
 		RefreshTokenExp: 7 * 24 * time.Hour,
 	}
@@ -121,6 +121,15 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+// Helper function to get required environment variable (panics if not set)
+func mustGetEnv(key string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	log.Fatalf("Required environment variable %s is not set", key)
+	return "" // This line will never be reached due to log.Fatalf
 }
 
 // Health check endpoint
